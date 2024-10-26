@@ -32,32 +32,30 @@ export function NewsArea () {
     }, [data]);
 
     useEffect( ()=>{
-        const  fetchData = async () => {
-            try {
-                setLoadingProgress(30);
-                let json = null;
-                if(category) {
-                    const categoryParam = `category=${category}`;
-                    let fetchData = await fetch(`https://newsapi.org/v2/top-headlines?${categoryParam}&apiKey=34d89e1e7e1d45faafb0f708d29d819f`);
-                    json = await fetchData.json();
-                } else {
-                    const countryParam = "country=us";
-                    let fetchData = await fetch(`https://newsapi.org/v2/top-headlines?${countryParam}&apiKey=34d89e1e7e1d45faafb0f708d29d819f`);
-                    json = await fetchData.json();
-                }
-                // let fetchData = await fetch(`https://newsapi.org/v2/top-headlines?${countryParam}&apiKey=34d89e1e7e1d45faafb0f708d29d819f`);
-                setLoadingProgress(70);
-                setData(json.articles);
-                setLoadingProgress(100);
-                console.log("Fetched data:", json);
+        const mount = ()=>{
+            let req = null
+            
+            if(category)
+            {
+                req = new Request(`https://news-site-server.vercel.app/us/${category}`)
             }
-            catch(error) {
-                console.error("error fetching data", error);
-                setLoadingProgress(0);
+            else{
+                req = new Request(`https://news-site-server.vercel.app/us`)
             }
+            fetch(req)
+                .then((response)=>{
+                    setLoadingProgress(30)
+                    return response.json()
+                })
+                .then((data)=>{
+                    setLoadingProgress(50)
+                    setData(data.articles)
+                    setLoadingProgress(100)
+                })
+            
         }
 
-        fetchData();
+        mount()
     }, [category])
 
     // console.log(data);
