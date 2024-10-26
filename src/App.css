@@ -1,0 +1,9 @@
+.App {
+  text-align: center;
+}
+
+body {
+  background-color: wheat;
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
